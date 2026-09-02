@@ -1,8 +1,5 @@
-# focused-recording-layout Specification
+## MODIFIED Requirements
 
-## Purpose
-TBD - created by archiving change maximize-recording-space. Update Purpose after archive.
-## Requirements
 ### Requirement: Prioritize habit actions on Registro
 When active habits exist, Registro SHALL place the responsive habit-card grid immediately below the global application header without a page title, date subtitle, aggregate achievement counter, progress bar, order control, order instruction, or global cloud-status badge. The grid SHALL calculate enough rows for all active habits and distribute the available height between them so the destination itself does not require vertical scrolling on a supported phone viewport.
 
@@ -13,18 +10,3 @@ When active habits exist, Registro SHALL place the responsive habit-card grid im
 #### Scenario: Open Registro with a different habit count
 - **WHEN** the number of active habits changes
 - **THEN** the grid SHALL recompute its rows and fit the cards into the available height
-
-### Requirement: Keep recording cards actionable
-Every habit card on Registro SHALL activate its time-entry sheet and SHALL continue to show the habit's own slots, target, and achieved state.
-
-#### Scenario: Activate any habit card
-- **WHEN** the user activates a card on Registro
-- **THEN** the corresponding time-entry sheet SHALL open
-
-### Requirement: Preserve an empty-state creation path
-Registro SHALL display a create-habit action when no active habit exists.
-
-#### Scenario: Open empty Registro
-- **WHEN** no active habit exists
-- **THEN** the user SHALL be able to create a habit from the empty state
-

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { HabitType, TimeEntry } from '../types'
-import { dailyAchievement, habitSlotLevel, heatmapLevel, heatmapWeeks, isAchieved } from './stats'
+import { dailyAchievement, habitSlotLevel, heatmapLevel, heatmapMonths, heatmapWeeks, isAchieved } from './stats'
 
 const habits: HabitType[] = [
   {
@@ -46,5 +46,14 @@ describe('slot progress', () => {
     expect(weeks[0]?.[0]).toBe('2025-09-08')
     expect(weeks.at(-1)?.[2]).toBe('2026-09-02')
     expect(weeks.at(-1)?.[3]).toBeUndefined()
+  })
+
+  it('builds twelve Monday-aligned calendar months ending with the current month', () => {
+    const months = heatmapMonths('2026-09-02')
+    expect(months).toHaveLength(12)
+    expect(months[0]?.id).toBe('2025-10')
+    expect(months.at(-1)?.id).toBe('2026-09')
+    expect(months.at(-1)?.days).toHaveLength(42)
+    expect(months.at(-1)?.days.slice(0, 4)).toEqual([undefined, '2026-09-01', '2026-09-02', undefined])
   })
 })

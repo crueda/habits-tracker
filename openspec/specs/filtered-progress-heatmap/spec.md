@@ -11,11 +11,19 @@ Progreso SHALL omit page subtitles, metric summary cards, graph explanatory subt
 - **THEN** compact filters and the contribution heatmap SHALL be the only persistent destination content
 
 ### Requirement: Show a year of contribution activity
-The heatmap SHALL render 52 Monday-aligned week columns ending today, using square cells, month context, weekday context, and five green levels including zero.
+The heatmap SHALL render twelve calendar months ending with the current month, using square cells, weekday context, a visible month and year heading, and five green levels including zero. Each month SHALL be a separate full-width panel in a horizontal snap-scrolling rail.
 
-#### Scenario: Open the year heatmap on a phone
-- **WHEN** the heatmap is wider than the available viewport
-- **THEN** it SHALL support horizontal scrolling and initially position the latest dates in view
+#### Scenario: Open monthly progress on a phone
+- **WHEN** the user opens Progreso
+- **THEN** the current month SHALL fill the graph viewport without vertical page scrolling
+
+#### Scenario: Browse an earlier month
+- **WHEN** the user swipes the graph horizontally
+- **THEN** the viewport SHALL snap to the adjacent monthly panel
+
+#### Scenario: Reach a date after today
+- **WHEN** the current-month calendar contains a cell after today
+- **THEN** that cell SHALL remain visually empty and non-interactive
 
 ### Requirement: Filter progress by habit
 The system SHALL provide a `Todos` filter and one filter for every non-deleted habit in configured order.

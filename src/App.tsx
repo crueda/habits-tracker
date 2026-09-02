@@ -4,7 +4,6 @@ import type { HabitType } from './types'
 import { getGreeting } from './lib/dates'
 import { LEGACY_THEME_STORAGE_KEY } from './lib/compatibility'
 import { useHabits } from './state/HabitsContext'
-import { SyncBadge } from './components/SyncBadge'
 import { RegisterView } from './components/RegisterView'
 import { ProgressView } from './components/ProgressView'
 import { HabitsView } from './components/HabitsView'
@@ -21,7 +20,7 @@ const NAVIGATION = [
 ] satisfies Array<{ id: View; label: string; icon: typeof ListChecks }>
 
 export default function App() {
-  const { ready, preferences, sync, entries } = useHabits()
+  const { ready, preferences, entries } = useHabits()
   const [view, setView] = useState<View>('register')
   const [entryHabit, setEntryHabit] = useState<HabitType>()
   const [editor, setEditor] = useState<{ open: boolean; habit?: HabitType }>({ open: false })
@@ -41,10 +40,9 @@ export default function App() {
   if (!ready) return <main className="loading-screen"><div className="brand-mark"><span>A</span></div><h1>Agatsu</h1><p>Preparando tu espacio…</p><i /></main>
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${view !== 'habits' ? 'focus-shell' : ''}`}>
       <header className={`app-header ${view !== 'habits' ? 'focus-header' : ''}`}>
         <a className="brand" href={import.meta.env.BASE_URL} aria-label="Agatsu, inicio"><span className="brand-symbol">A</span><span><strong>Agatsu</strong>{view === 'habits' && <small>{getGreeting()}</small>}</span></a>
-        <SyncBadge status={sync.status} />
       </header>
       <main className={`main-content ${view === 'register' ? 'register-content' : view === 'progress' ? 'progress-content' : ''}`}>
         {view === 'register' && <RegisterView onOpen={setEntryHabit} onCreate={() => setEditor({ open: true })} />}

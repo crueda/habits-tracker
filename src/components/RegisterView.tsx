@@ -36,11 +36,15 @@ export function RegisterView({ onOpen, onCreate }: {
 }) {
   const { habitTypes } = useHabits()
   const habits = useMemo(() => activeHabitTypes(habitTypes), [habitTypes])
+  const gridStyle = {
+    '--record-columns': Math.min(2, habits.length),
+    '--record-columns-wide': Math.min(3, habits.length),
+  } as CSSProperties
 
   return (
     <section className="register-view view-enter" aria-label="Registro de hábitos">
       {habits.length ? (
-        <div className="record-grid">
+        <div className={`record-grid ${habits.length > 6 ? 'dense' : ''}`} style={gridStyle}>
           {habits.map((habit) => <HabitCard key={habit.id} habit={habit} onOpen={() => onOpen(habit)} />)}
         </div>
       ) : (

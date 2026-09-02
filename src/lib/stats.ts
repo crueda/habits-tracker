@@ -1,5 +1,10 @@
 import type { HabitType, LocalDate, TimeEntry } from '../types'
-import { addDays, dateRange, mondayIndex, toLocalDate } from './dates'
+import { addDays, dateRange, fromLocalDate, mondayIndex, toLocalDate } from './dates'
+
+export interface HeatmapMonth {
+  id: string
+  days: Array<LocalDate | undefined>
+}
 
 export function entryId(habitTypeId: string, date: LocalDate): string {
   return `${habitTypeId}_${date}`
@@ -57,6 +62,30 @@ export function heatmapWeeks(today = toLocalDate(), weekCount = 52): Array<Array
       return date <= today ? date : undefined
     }),
   )
+}
+
+export function heatmapMonths(today = toLocalDate(), monthCount = 12): HeatmapMonth[] {
+  const current = fromLocalDate(today)
+
+  return Array.from({ length: monthCount }, (_, index) => {
+    const offset = index - monthCount + 1
+    const firstDay = new Date(current.getFullYear(), current.getMonth() + offset, 1, 12)
+    const year = firstDay.getFullYear()
+    const month = firstDay.getMonth()
+    const id = `${year}-${String(month + 1).padStart(2, '0')}`
+    const leadingDays = mondayIndex(toLocalDate(firstDay))
+    const daysInMonth = new Date(year, month + 1, 0, 12).getDate()
+
+    return {
+      id,
+      days: Array.from({ length: 42 }, (_, cellIndex) => {
+        const day = cellIndex - leadingDays + 1
+        if (day < 1 || day > daysInMonth) return undefined
+        const date = toLocalDate(new Date(year, month, day, 12))
+        return date <= today ? date : undefined
+      }),
+    }
+  })
 }
 
 export function rangeAchievement(habits: HabitType[], entries: TimeEntry[], from: LocalDate, to: LocalDate) {

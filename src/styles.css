@@ -100,6 +100,15 @@ a:focus-visible {
   position: relative;
 }
 
+.app-shell.focus-shell {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+}
+
 .app-header {
   min-height: 76px;
   padding: max(14px, env(safe-area-inset-top)) 20px 10px;
@@ -1701,7 +1710,7 @@ a:focus-visible {
 
 .record-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--record-columns, 2), minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -1809,7 +1818,7 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
 .manage-habit svg, .settings-section svg, .data-actions svg { width: 18px; }
 
 @media (min-width: 700px) {
-  .record-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .record-grid { grid-template-columns: repeat(var(--record-columns-wide, 3), minmax(0, 1fr)); }
 }
 
 .app-header.focus-header {
@@ -1817,19 +1826,50 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
   padding-bottom: 6px;
 }
 
+.focus-shell .main-content {
+  min-height: 0;
+  padding-bottom: calc(104px + env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
 .main-content.register-content {
   padding-top: 2px;
 }
 
 .register-view {
-  min-height: calc(100dvh - 180px);
+  height: 100%;
+  min-height: 0;
   display: flex;
 }
 
 .register-view .record-grid {
   width: 100%;
+  min-height: 0;
   flex: 1;
-  grid-auto-rows: minmax(155px, 1fr);
+  grid-auto-rows: minmax(0, 1fr);
+}
+
+.register-view .record-card {
+  min-height: 0;
+  padding: clamp(11px, 2.2vh, 17px);
+}
+
+.register-view .record-grid.dense {
+  gap: 8px;
+}
+
+.register-view .record-grid.dense .record-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 15px 15px 15px 6px;
+}
+
+.register-view .record-grid.dense .record-card-copy {
+  gap: 2px;
+}
+
+.register-view .record-grid.dense .record-card-copy strong {
+  font-size: 18px;
 }
 
 .register-view > .empty-card {
@@ -1888,7 +1928,8 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
 }
 
 .progress-focus {
-  min-height: calc(100dvh - 180px);
+  height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1937,72 +1978,90 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
 }
 
 .heatmap-card.focused {
-  --heat-cell: clamp(29px, 5.2vh, 42px);
-  min-height: 430px;
-  padding: 20px 14px 15px;
+  min-height: 0;
+  padding: 14px 12px 11px;
   display: flex;
   flex: 1;
   flex-direction: column;
-  justify-content: center;
   overflow: hidden;
 }
 
-.focused-scroll {
-  margin: 0 -14px;
-  padding: 14px;
+.monthly-scroll {
+  min-height: 0;
+  margin-inline: -12px;
   flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-inline: contain;
   scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
 }
 
-.heatmap-months.year {
-  width: max-content;
+.monthly-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.month-panel {
   min-width: 0;
-  grid-template-columns: 24px repeat(52, var(--heat-cell));
-  gap: 6px;
+  padding: 1px 12px 3px;
+  display: flex;
+  flex: 0 0 100%;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
 
-.heatmap-months.year span {
+.month-panel h2 {
+  margin: 0 0 clamp(8px, 1.8vh, 15px);
+  font-size: clamp(20px, 5.8vw, 26px);
+  text-align: center;
+}
+
+.month-panel h2 span {
+  text-transform: capitalize;
+}
+
+.month-weekdays,
+.month-grid {
+  width: 100%;
+  max-width: 370px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: clamp(4px, 1.3vw, 7px);
+}
+
+.month-weekdays {
+  margin-bottom: 7px;
+}
+
+.month-weekdays span {
+  color: var(--muted);
   font-size: 9px;
   font-weight: 700;
+  text-align: center;
 }
 
-.heatmap-body.year {
-  width: max-content;
+.month-grid {
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+}
+
+.month-cell {
+  width: 100%;
   min-width: 0;
-  grid-template-columns: 24px auto;
-  gap: 6px;
-}
-
-.heatmap-weekdays.year {
-  grid-template-rows: repeat(7, var(--heat-cell));
-  gap: 6px;
-}
-
-.heatmap-weekdays.year span {
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.heatmap-weeks.year {
-  grid-template-columns: repeat(52, var(--heat-cell));
-  gap: 6px;
-}
-
-.heatmap-week.year {
-  grid-template-rows: repeat(7, var(--heat-cell));
-  gap: 6px;
-}
-
-.heatmap-cell.year {
-  width: var(--heat-cell);
-  min-width: var(--heat-cell);
-  height: var(--heat-cell);
+  height: auto;
+  aspect-ratio: 1;
   border: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
-  border-radius: 6px;
+  border-radius: clamp(4px, 1.4vw, 7px);
+}
+
+.month-cell.empty {
+  border-color: transparent;
+  background: transparent;
+  opacity: 0;
 }
 
 .heatmap-card.focused .heatmap-legend {
@@ -2039,8 +2098,15 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
 }
 
 @media (max-height: 650px) {
-  .heatmap-card.focused {
-    --heat-cell: 28px;
-    min-height: 330px;
-  }
+  .register-view .record-card { padding: 9px 11px; }
+  .register-view .record-icon { width: 43px; height: 43px; border-radius: 15px 15px 15px 6px; }
+  .register-view .record-card-copy { gap: 2px; }
+  .register-view .record-card-copy strong { font-size: 18px; }
+  .register-view .record-card-copy small { font-size: 9px; }
+  .register-view .done-mark { width: 24px; height: 24px; }
+  .habit-filter-rail button { min-height: 35px; padding-block: 6px; }
+  .progress-focus { gap: 8px; }
+  .month-panel { padding-inline: 30px; }
+  .month-panel h2 { margin-bottom: 7px; font-size: 19px; }
+  .month-weekdays { margin-bottom: 4px; }
 }
