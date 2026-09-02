@@ -7,4 +7,4 @@
 
 - [x] 2.1 Add tests proving legacy backup compatibility while preserving storage and preference identifiers
 - [x] 2.2 Validate OpenSpec, lint, tests, build, and the unchanged GitHub Pages base path
-- [ ] 2.3 Commit, push, and verify the Agatsu release on GitHub Pages
+- [x] 2.3 Commit, push, and verify the Agatsu release on GitHub Pages
