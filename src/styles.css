@@ -1328,16 +1328,34 @@ a:focus-visible {
   border: 0;
 }
 
-.icon-choices,
 .color-choices {
   display: flex;
   flex-wrap: wrap;
   gap: 7px;
 }
 
+.icon-groups {
+  display: grid;
+  gap: 13px;
+}
+
+.icon-group-label {
+  margin: 0 0 6px 2px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.icon-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(42px, 48px));
+  gap: 7px;
+}
+
 .choice-icon {
-  width: 42px;
-  height: 42px;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
   border: 1px solid var(--line);
@@ -1350,6 +1368,11 @@ a:focus-visible {
   border-color: var(--forest);
   background: var(--forest-soft);
   transform: translateY(-2px);
+}
+
+.choice-icon svg {
+  width: 21px;
+  height: 21px;
 }
 
 .color-choice {

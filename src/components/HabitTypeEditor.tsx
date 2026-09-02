@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Check, X } from 'lucide-react'
-import type { HabitIconName, HabitType, HabitTypeDraft } from '../types'
+import type { HabitType, HabitTypeDraft } from '../types'
 import { formatDuration } from '../lib/dates'
-import { HABIT_ICON_OPTIONS, HabitIcon } from '../lib/habit-icons'
+import { HABIT_ICON_GROUPS, HabitIcon } from '../lib/habit-icons'
 import { useHabits } from '../state/HabitsContext'
 
 const COLORS = ['#e57542', '#4d8b63', '#6672a5', '#3f7c85', '#b85c70', '#9a6a3a', '#6e5b88', '#4d738b']
@@ -45,9 +45,14 @@ export function HabitTypeEditor({ habit, onClose }: { habit?: HabitType; onClose
         <input id="habit-name" autoFocus className={`text-input ${draft.name.length > 80 ? 'invalid' : ''}`} maxLength={81}
           value={draft.name} placeholder="Por ejemplo, Meditación" onChange={(event) => setDraft({ ...draft, name: event.target.value })} />
 
-        <fieldset className="choice-fieldset"><legend className="field-label">Icono</legend><div className="icon-choices">
-          {HABIT_ICON_OPTIONS.map(({ id, label }) => <button key={id} className={`choice-icon ${draft.icon === id ? 'selected' : ''}`} type="button"
-            title={label} aria-label={label} aria-pressed={draft.icon === id} onClick={() => setDraft({ ...draft, icon: id as HabitIconName })}><HabitIcon name={id} /></button>)}
+        <fieldset className="choice-fieldset icon-picker"><legend className="field-label">Icono</legend><div className="icon-groups">
+          {HABIT_ICON_GROUPS.map((group) => <div className="icon-group" role="group" aria-labelledby={`icon-group-${group.id}`} key={group.id}>
+            <p className="icon-group-label" id={`icon-group-${group.id}`}>{group.label}</p>
+            <div className="icon-choices">
+              {group.options.map(({ id, label }) => <button key={id} className={`choice-icon ${draft.icon === id ? 'selected' : ''}`} type="button"
+                title={label} aria-label={label} aria-pressed={draft.icon === id} onClick={() => setDraft({ ...draft, icon: id })}><HabitIcon name={id} /></button>)}
+            </div>
+          </div>)}
         </div></fieldset>
 
         <fieldset className="choice-fieldset"><legend className="field-label">Color</legend><div className="color-choices">

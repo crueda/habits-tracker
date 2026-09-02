@@ -28,6 +28,12 @@ describe('backup validation', () => {
     expect(LEGACY_BACKUP_FORMAT).toBe('ritmo-habits-backup')
   })
 
+  it('accepts identifiers from the expanded icon catalog', () => {
+    const backup = createBackup(snapshot)
+    backup.habitTypes[0] = { ...backup.habitTypes[0], icon: 'heart-pulse' }
+    expect(parseBackup(backup).habitTypes[0]?.icon).toBe('heart-pulse')
+  })
+
   it('rejects unknown formats', () => {
     expect(() => parseBackup({ format: 'other', version: 2 })).toThrow('compatible')
   })
