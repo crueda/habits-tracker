@@ -1789,7 +1789,7 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
   .record-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
-.app-header.record-header {
+.app-header.focus-header {
   min-height: 62px;
   padding-bottom: 6px;
 }
@@ -1857,5 +1857,167 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
   .settings-title-row .soft-button.compact {
     padding-inline: 9px;
     font-size: 10px;
+  }
+}
+
+.main-content.progress-content {
+  padding-top: 2px;
+}
+
+.progress-focus {
+  min-height: calc(100dvh - 180px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.habit-filter-rail {
+  margin-inline: -20px;
+  padding: 3px 20px 7px;
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+}
+
+.habit-filter-rail::-webkit-scrollbar { display: none; }
+
+.habit-filter-rail button {
+  min-height: 39px;
+  padding: 8px 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.habit-filter-rail button svg { width: 16px; height: 16px; }
+
+.habit-filter-rail button.selected {
+  color: #fff;
+  border-color: #25613f;
+  background: #25613f;
+  box-shadow: 0 5px 16px color-mix(in srgb, #25613f 28%, transparent);
+}
+
+:root[data-theme='dark'] .habit-filter-rail button.selected {
+  color: #102419;
+  border-color: #a8d9b8;
+  background: #a8d9b8;
+}
+
+.heatmap-card.focused {
+  --heat-cell: clamp(29px, 5.2vh, 42px);
+  min-height: 430px;
+  padding: 20px 14px 15px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.focused-scroll {
+  margin: 0 -14px;
+  padding: 14px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overscroll-behavior-inline: contain;
+  scroll-behavior: smooth;
+}
+
+.heatmap-months.year {
+  width: max-content;
+  min-width: 0;
+  grid-template-columns: 24px repeat(52, var(--heat-cell));
+  gap: 6px;
+}
+
+.heatmap-months.year span {
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.heatmap-body.year {
+  width: max-content;
+  min-width: 0;
+  grid-template-columns: 24px auto;
+  gap: 6px;
+}
+
+.heatmap-weekdays.year {
+  grid-template-rows: repeat(7, var(--heat-cell));
+  gap: 6px;
+}
+
+.heatmap-weekdays.year span {
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.heatmap-weeks.year {
+  grid-template-columns: repeat(52, var(--heat-cell));
+  gap: 6px;
+}
+
+.heatmap-week.year {
+  grid-template-rows: repeat(7, var(--heat-cell));
+  gap: 6px;
+}
+
+.heatmap-cell.year {
+  width: var(--heat-cell);
+  min-width: var(--heat-cell);
+  height: var(--heat-cell);
+  border: 1px solid color-mix(in srgb, var(--line) 65%, transparent);
+  border-radius: 6px;
+}
+
+.heatmap-card.focused .heatmap-legend {
+  min-height: 22px;
+  margin-top: 6px;
+  padding-right: 3px;
+  font-size: 9px;
+}
+
+.heatmap-card.focused .heatmap-legend i {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.progress-day-sheet .sheet-header {
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+
+.progress-day-sheet .sheet-header h2 {
+  text-transform: capitalize;
+}
+
+.progress-day-sheet .sheet-header small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.progress-day-sheet .progress-detail-list {
+  margin-top: 0;
+}
+
+@media (max-height: 650px) {
+  .heatmap-card.focused {
+    --heat-cell: 28px;
+    min-height: 330px;
   }
 }

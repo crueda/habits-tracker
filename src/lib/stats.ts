@@ -42,7 +42,13 @@ export function heatmapLevel(achieved: number, total: number): 0 | 1 | 2 | 3 | 4
   return Math.min(4, Math.max(1, Math.ceil((achieved / total) * 4))) as 1 | 2 | 3 | 4
 }
 
-export function heatmapWeeks(today = toLocalDate(), weekCount = 16): Array<Array<LocalDate | undefined>> {
+export function habitSlotLevel(slots: number, targetSlots: number): 0 | 1 | 2 | 3 | 4 {
+  if (slots <= 0 || targetSlots <= 0) return 0
+  if (slots >= targetSlots) return 4
+  return Math.min(3, Math.max(1, Math.ceil((slots / targetSlots) * 3))) as 1 | 2 | 3
+}
+
+export function heatmapWeeks(today = toLocalDate(), weekCount = 52): Array<Array<LocalDate | undefined>> {
   const currentMonday = addDays(today, -mondayIndex(today))
   const firstMonday = addDays(currentMonday, -(weekCount - 1) * 7)
   return Array.from({ length: weekCount }, (_, weekIndex) =>
