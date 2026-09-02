@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <div className={`app-shell ${view !== 'habits' ? 'focus-shell' : ''}`}>
-      <header className={`app-header ${view !== 'habits' ? 'focus-header' : ''}`}>
+      <header className={`app-header ${view !== 'habits' ? 'focus-header' : 'settings-header'}`}>
         <a className="brand" href={import.meta.env.BASE_URL} aria-label="Agatsu, inicio"><span className="brand-symbol">A</span><span><strong>Agatsu</strong>{view === 'habits' && <small>{getGreeting()}</small>}</span></a>
       </header>
       <main className={`main-content ${view === 'register' ? 'register-content' : view === 'progress' ? 'progress-content' : ''}`}>
