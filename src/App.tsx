@@ -42,11 +42,11 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <a className="brand" href={import.meta.env.BASE_URL} aria-label="Agatsu, inicio"><span className="brand-symbol">A</span><span><strong>Agatsu</strong><small>{getGreeting()}</small></span></a>
+      <header className={`app-header ${view === 'register' ? 'record-header' : ''}`}>
+        <a className="brand" href={import.meta.env.BASE_URL} aria-label="Agatsu, inicio"><span className="brand-symbol">A</span><span><strong>Agatsu</strong>{view !== 'register' && <small>{getGreeting()}</small>}</span></a>
         <SyncBadge status={sync.status} />
       </header>
-      <main className="main-content">
+      <main className={`main-content ${view === 'register' ? 'register-content' : ''}`}>
         {view === 'register' && <RegisterView onOpen={setEntryHabit} onCreate={() => setEditor({ open: true })} />}
         {view === 'progress' && <ProgressView />}
         {view === 'habits' && <HabitsView onCreate={() => setEditor({ open: true })} onEdit={(habit) => setEditor({ open: true, habit })} />}

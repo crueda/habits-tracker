@@ -1,6 +1,14 @@
 import { useRef, useState, type ChangeEvent, type CSSProperties } from 'react'
 import {
-  Archive, Cloud, Download, FileText, Moon, Pencil, Plus, RefreshCw, RotateCcw,
+  DndContext, KeyboardSensor, PointerSensor, TouchSensor, closestCenter,
+  useSensor, useSensors, type DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import {
+  Archive, Cloud, Download, FileText, GripVertical, Moon, Pencil, Plus, RefreshCw, RotateCcw,
   ShieldCheck, Smartphone, Sun, Trash2, Upload,
 } from 'lucide-react'
 import type { HabitType, ThemePreference } from '../types'
@@ -10,12 +18,58 @@ import { HabitIcon } from '../lib/habit-icons'
 import { useHabits } from '../state/HabitsContext'
 import { SyncBadge } from './SyncBadge'
 
+function SortableHabitRow({ habit, ordering, onEdit, onArchive, onDelete }: {
+  habit: HabitType
+  ordering: boolean
+  onEdit: () => void
+  onArchive: () => void
+  onDelete: () => void
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: habit.id,
+    disabled: !ordering,
+  })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.65 : 1,
+    zIndex: isDragging ? 2 : undefined,
+  } as CSSProperties
+
+  return (
+    <article ref={setNodeRef} className={`manage-habit ${ordering ? 'ordering' : ''}`} style={style}>
+      {ordering && <button className="order-handle" type="button" aria-label={`Mover ${habit.name}`} {...attributes} {...listeners}><GripVertical /></button>}
+      <span className="mini-habit-icon" style={{ '--habit-color': habit.color } as CSSProperties}><HabitIcon name={habit.icon} /></span>
+      <div className="manage-habit-copy"><strong>{habit.name}</strong><span>{habit.slotMinutes} min/slot · objetivo {habit.targetSlots} ({formatDuration(habit.slotMinutes * habit.targetSlots)})</span></div>
+      {!ordering && <div className="row-actions">
+        <button type="button" onClick={onEdit} aria-label={`Editar ${habit.name}`}><Pencil /></button>
+        <button type="button" onClick={onArchive} aria-label={`Archivar ${habit.name}`}><Archive /></button>
+        <button className="danger" type="button" onClick={onDelete} aria-label={`Eliminar ${habit.name}`}><Trash2 /></button>
+      </div>}
+    </article>
+  )
+}
+
 export function HabitsView({ onCreate, onEdit }: { onCreate: () => void; onEdit: (habit: HabitType) => void }) {
   const store = useHabits()
   const [message, setMessage] = useState<string>()
+  const [ordering, setOrdering] = useState(false)
   const importRef = useRef<HTMLInputElement>(null)
   const active = store.habitTypes.filter((habit) => !habit.deletedAt && !habit.archivedAt).sort((a, b) => a.order - b.order)
   const archived = store.habitTypes.filter((habit) => !habit.deletedAt && habit.archivedAt)
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 180, tolerance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  )
+
+  const dragEnd = (event: DragEndEvent) => {
+    if (!event.over || event.active.id === event.over.id) return
+    const previousIndex = active.findIndex((habit) => habit.id === event.active.id)
+    const nextIndex = active.findIndex((habit) => habit.id === event.over?.id)
+    if (previousIndex < 0 || nextIndex < 0) return
+    void store.reorderHabitTypes(arrayMove(active, previousIndex, nextIndex).map((habit) => habit.id))
+  }
 
   const exportJson = () => {
     downloadText(JSON.stringify(createBackup(store), null, 2), `agatsu-copia-${toLocalDate()}.json`, 'application/json;charset=utf-8')
@@ -54,22 +108,22 @@ export function HabitsView({ onCreate, onEdit }: { onCreate: () => void; onEdit:
 
       <section className="settings-section">
         <div className="settings-title-row"><div className="settings-icon orange"><Smartphone /></div>
-          <div><h2>Tipos de hábito</h2><p>{active.length} activos · {archived.length} archivados</p></div></div>
-        <div className="manage-list">
-          {active.map((habit) => <article className="manage-habit" key={habit.id}>
-            <span className="mini-habit-icon" style={{ '--habit-color': habit.color } as CSSProperties}><HabitIcon name={habit.icon} /></span>
-            <div><strong>{habit.name}</strong><span>{habit.slotMinutes} min/slot · objetivo {habit.targetSlots} ({formatDuration(habit.slotMinutes * habit.targetSlots)})</span></div>
-            <div className="row-actions">
-              <button type="button" onClick={() => onEdit(habit)} aria-label={`Editar ${habit.name}`}><Pencil /></button>
-              <button type="button" onClick={() => void confirmArchive(habit)} aria-label={`Archivar ${habit.name}`}><Archive /></button>
-              <button className="danger" type="button" onClick={() => void confirmDelete(habit)} aria-label={`Eliminar ${habit.name}`}><Trash2 /></button>
-            </div>
-          </article>)}
-          {!active.length && <p className="quiet-empty">No hay hábitos activos.</p>}
+          <div><h2>Tipos de hábito</h2><p>{active.length} activos · {archived.length} archivados</p></div>
+          {active.length > 1 && <button className={`soft-button compact ${ordering ? 'selected' : ''}`} type="button" onClick={() => setOrdering(!ordering)}><GripVertical /> {ordering ? 'Listo' : 'Ordenar'}</button>}
         </div>
+        {ordering && <p className="manage-order-hint">Arrastra cada fila para cambiar el orden de Registro.</p>}
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
+          <SortableContext items={active.map((habit) => habit.id)} strategy={verticalListSortingStrategy}>
+            <div className="manage-list">
+              {active.map((habit) => <SortableHabitRow key={habit.id} habit={habit} ordering={ordering}
+                onEdit={() => onEdit(habit)} onArchive={() => void confirmArchive(habit)} onDelete={() => void confirmDelete(habit)} />)}
+              {!active.length && <p className="quiet-empty">No hay hábitos activos.</p>}
+            </div>
+          </SortableContext>
+        </DndContext>
         {archived.length > 0 && <details className="archived-details"><summary>Archivados ({archived.length})</summary><div className="manage-list">
           {archived.map((habit) => <article className="manage-habit" key={habit.id}>
-            <span className="mini-habit-icon muted"><HabitIcon name={habit.icon} /></span><div><strong>{habit.name}</strong><span>Conserva su historial</span></div>
+            <span className="mini-habit-icon muted"><HabitIcon name={habit.icon} /></span><div className="manage-habit-copy"><strong>{habit.name}</strong><span>Conserva su historial</span></div>
             <div className="row-actions"><button type="button" onClick={() => void store.restoreHabitType(habit.id)} aria-label={`Restaurar ${habit.name}`}><RotateCcw /></button>
               <button className="danger" type="button" onClick={() => void confirmDelete(habit)} aria-label={`Eliminar ${habit.name}`}><Trash2 /></button></div>
           </article>)}

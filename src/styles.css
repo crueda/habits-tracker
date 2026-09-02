@@ -1788,3 +1788,74 @@ button.heatmap-cell:hover { box-shadow: 0 0 0 2px var(--orange); }
 @media (min-width: 700px) {
   .record-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+.app-header.record-header {
+  min-height: 62px;
+  padding-bottom: 6px;
+}
+
+.main-content.register-content {
+  padding-top: 2px;
+}
+
+.register-view {
+  min-height: calc(100dvh - 180px);
+  display: flex;
+}
+
+.register-view .record-grid {
+  width: 100%;
+  flex: 1;
+  grid-auto-rows: minmax(155px, 1fr);
+}
+
+.register-view > .empty-card {
+  width: 100%;
+  margin: auto 0;
+}
+
+.manage-habit-copy {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+
+.manage-habit.ordering {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--orange) 25%, var(--line));
+  border-radius: 15px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+  touch-action: none;
+}
+
+.order-handle {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--orange);
+  background: var(--bg-soft);
+  cursor: grab;
+  touch-action: none;
+}
+
+.order-handle:active { cursor: grabbing; }
+
+.manage-order-hint {
+  margin: 13px 0 -4px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+@media (max-width: 370px) {
+  .settings-title-row .soft-button.compact {
+    padding-inline: 9px;
+    font-size: 10px;
+  }
+}
