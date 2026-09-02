@@ -4,11 +4,11 @@ PWA móvil para registrar tiempo dedicado a hábitos sin una pantalla de acceso.
 
 La aplicación incluye tres destinos:
 
-- **Registro**: tarjetas rápidas para Piano, Fuerza, Japonés y Piscina, centradas en registrar sin controles secundarios.
+- **Registro**: tarjetas rápidas para Piano, Fuerza, Japonés, Piscina y Diario, centradas en registrar sin controles secundarios.
 - **Progreso**: mapa de 52 semanas al estilo de las contribuciones de GitHub, con intensidad y filtro por hábito.
 - **Hábitos**: nombre, 40 iconos Lucide categorizados, color, duración del slot, objetivo y orden de las tarjetas.
 
-En el primer uso se crean esos cuatro hábitos con slots de 15 minutos y un objetivo inicial de un slot. Después se pueden editar, archivar o eliminar.
+En el primer uso se crean esos cinco hábitos con slots de 15 minutos y un objetivo inicial de un slot. Las instalaciones anteriores reciben Diario una sola vez; después todos se pueden editar, archivar o eliminar.
 
 ## Desarrollo local
 

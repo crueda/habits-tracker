@@ -4,6 +4,7 @@ import type {
 } from '../types'
 import { DEFAULT_PREFERENCES } from '../types'
 import { LEGACY_DATABASE_NAME } from '../lib/compatibility'
+import { missingDefaultHabits } from '../lib/default-habits'
 
 interface AgatsuDatabase extends DBSchema {
   habitTypes: { key: string; value: HabitType }
@@ -11,13 +12,6 @@ interface AgatsuDatabase extends DBSchema {
   preferences: { key: 'current'; value: Preferences }
   queue: { key: string; value: PendingOperation; indexes: { 'by-queued-at': string } }
 }
-
-const SEED_HABITS: ReadonlyArray<Pick<HabitType, 'id' | 'name' | 'icon' | 'color'>> = [
-  { id: 'default-piano', name: 'Piano', icon: 'piano', color: '#e57542' },
-  { id: 'default-fuerza', name: 'Fuerza', icon: 'dumbbell', color: '#4d8b63' },
-  { id: 'default-japones', name: 'Japonés', icon: 'languages', color: '#6672a5' },
-  { id: 'default-piscina', name: 'Piscina', icon: 'waves', color: '#3f7c85' },
-]
 
 let databasePromise: Promise<IDBPDatabase<AgatsuDatabase>> | undefined
 
@@ -46,23 +40,18 @@ function pending(entity: SyncEntity, recordId: string): PendingOperation {
 async function seedIfNeeded(db: IDBPDatabase<AgatsuDatabase>): Promise<void> {
   const stored = await db.get('preferences', 'current')
   const preferences = stored ?? DEFAULT_PREFERENCES
-  if (preferences.hasSeededDefaults) return
+  const existing = await db.getAll('habitTypes')
+  const habits = missingDefaultHabits(existing, preferences.hasSeededDefaults, new Date().toISOString())
+  if (preferences.hasSeededDefaults && !habits.length) return
 
   const transaction = db.transaction(['habitTypes', 'preferences', 'queue'], 'readwrite')
-  const now = new Date().toISOString()
-  for (const [order, seed] of SEED_HABITS.entries()) {
-    const habit: HabitType = {
-      ...seed,
-      slotMinutes: 15,
-      targetSlots: 1,
-      order,
-      createdAt: now,
-      updatedAt: now,
-    }
+  for (const habit of habits) {
     await transaction.objectStore('habitTypes').put(habit)
     await transaction.objectStore('queue').put(pending('habitType', habit.id))
   }
-  await transaction.objectStore('preferences').put({ ...preferences, hasSeededDefaults: true }, 'current')
+  if (!preferences.hasSeededDefaults) {
+    await transaction.objectStore('preferences').put({ ...preferences, hasSeededDefaults: true }, 'current')
+  }
   await transaction.done
 }
 
