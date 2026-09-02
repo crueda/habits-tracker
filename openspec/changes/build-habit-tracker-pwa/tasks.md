@@ -33,4 +33,4 @@
 ## 6. Firebase and delivery
 
 - [x] 6.1 Update Firestore synchronization paths and rule tests for `habitTypes` and `entries`
-- [ ] 6.2 Update documentation and verify GitHub Pages path, offline artifacts, lint, unit tests, build, OpenSpec, and mobile layout
+- [x] 6.2 Update documentation and verify GitHub Pages path, offline artifacts, lint, unit tests, build, OpenSpec, and mobile layout
