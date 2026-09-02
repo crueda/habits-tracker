@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { BarChart3, ListChecks, Settings2 } from 'lucide-react'
 import type { HabitType } from './types'
 import { getGreeting } from './lib/dates'
+import { LEGACY_THEME_STORAGE_KEY } from './lib/compatibility'
 import { useHabits } from './state/HabitsContext'
 import { SyncBadge } from './components/SyncBadge'
 import { RegisterView } from './components/RegisterView'
@@ -30,19 +31,19 @@ export default function App() {
     const apply = () => {
       const dark = preferences.theme === 'dark' || (preferences.theme === 'system' && media.matches)
       document.documentElement.dataset.theme = dark ? 'dark' : 'light'
-      localStorage.setItem('ritmo-theme', preferences.theme)
+      localStorage.setItem(LEGACY_THEME_STORAGE_KEY, preferences.theme)
     }
     apply()
     media.addEventListener('change', apply)
     return () => media.removeEventListener('change', apply)
   }, [preferences.theme])
 
-  if (!ready) return <main className="loading-screen"><div className="brand-mark"><span>R</span></div><h1>Ritmo</h1><p>Preparando tu espacio…</p><i /></main>
+  if (!ready) return <main className="loading-screen"><div className="brand-mark"><span>A</span></div><h1>Agatsu</h1><p>Preparando tu espacio…</p><i /></main>
 
   return (
     <div className="app-shell">
       <header className="app-header">
-        <a className="brand" href={import.meta.env.BASE_URL} aria-label="Ritmo, inicio"><span className="brand-symbol">R</span><span><strong>Ritmo</strong><small>{getGreeting()}</small></span></a>
+        <a className="brand" href={import.meta.env.BASE_URL} aria-label="Agatsu, inicio"><span className="brand-symbol">A</span><span><strong>Agatsu</strong><small>{getGreeting()}</small></span></a>
         <SyncBadge status={sync.status} />
       </header>
       <main className="main-content">

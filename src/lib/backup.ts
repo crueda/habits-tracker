@@ -2,6 +2,7 @@ import type { AppSnapshot, BackupData, HabitType, LocalDate, Preferences, TimeEn
 import { formatDate, formatDuration, toLocalDate } from './dates'
 import { isHabitIconName } from './habit-icons'
 import { dailyAchievement, entryFor } from './stats'
+import { LEGACY_BACKUP_FORMAT } from './compatibility'
 
 const LOCAL_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 const COLOR_PATTERN = /^#[0-9a-f]{6}$/i
@@ -89,7 +90,7 @@ export function createBackup(snapshot: AppSnapshot): BackupData {
   const habitTypes = snapshot.habitTypes.filter((habit) => !habit.deletedAt)
   const habitIds = new Set(habitTypes.map((habit) => habit.id))
   return {
-    format: 'ritmo-habits-backup',
+    format: LEGACY_BACKUP_FORMAT,
     version: 2,
     exportedAt: new Date().toISOString(),
     habitTypes,
@@ -99,8 +100,8 @@ export function createBackup(snapshot: AppSnapshot): BackupData {
 }
 
 export function parseBackup(value: unknown): BackupData {
-  if (!isObject(value) || value.format !== 'ritmo-habits-backup' || value.version !== 2) {
-    throw new Error('No es una copia de Ritmo compatible.')
+  if (!isObject(value) || value.format !== LEGACY_BACKUP_FORMAT || value.version !== 2) {
+    throw new Error('No es una copia de Agatsu compatible.')
   }
   if (!isTimestamp(value.exportedAt) || !Array.isArray(value.habitTypes) || !Array.isArray(value.entries)) {
     throw new Error('La copia está incompleta o dañada.')
@@ -121,7 +122,7 @@ export function parseBackup(value: unknown): BackupData {
 
   const preferences = parsePreferences(value.preferences)
   if (!preferences) throw new Error('La copia contiene preferencias no válidas.')
-  return { format: 'ritmo-habits-backup', version: 2, exportedAt: value.exportedAt, habitTypes, entries, preferences }
+  return { format: LEGACY_BACKUP_FORMAT, version: 2, exportedAt: value.exportedAt, habitTypes, entries, preferences }
 }
 
 export function createMarkdownReport(snapshot: AppSnapshot): string {
@@ -129,7 +130,7 @@ export function createMarkdownReport(snapshot: AppSnapshot): string {
   const visible = snapshot.habitTypes.filter((habit) => !habit.deletedAt)
   const daily = dailyAchievement(snapshot.habitTypes, snapshot.entries, today)
   const lines = [
-    '# Mis hábitos — Ritmo',
+    '# Mis hábitos — Agatsu',
     '',
     `Exportado el ${formatDate(today)}.`,
     '',

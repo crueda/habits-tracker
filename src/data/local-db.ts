@@ -3,8 +3,9 @@ import type {
   AppSnapshot, BackupData, HabitType, PendingOperation, Preferences, SyncEntity, TimeEntry,
 } from '../types'
 import { DEFAULT_PREFERENCES } from '../types'
+import { LEGACY_DATABASE_NAME } from '../lib/compatibility'
 
-interface RitmoDatabase extends DBSchema {
+interface AgatsuDatabase extends DBSchema {
   habitTypes: { key: string; value: HabitType }
   entries: { key: string; value: TimeEntry; indexes: { 'by-habit': string; 'by-date': string } }
   preferences: { key: 'current'; value: Preferences }
@@ -18,10 +19,10 @@ const SEED_HABITS: ReadonlyArray<Pick<HabitType, 'id' | 'name' | 'icon' | 'color
   { id: 'default-piscina', name: 'Piscina', icon: 'waves', color: '#3f7c85' },
 ]
 
-let databasePromise: Promise<IDBPDatabase<RitmoDatabase>> | undefined
+let databasePromise: Promise<IDBPDatabase<AgatsuDatabase>> | undefined
 
 function database() {
-  databasePromise ??= openDB<RitmoDatabase>('ritmo-habits', 2, {
+  databasePromise ??= openDB<AgatsuDatabase>(LEGACY_DATABASE_NAME, 2, {
     upgrade(db) {
       for (const oldName of ['habits', 'completions', 'habitTypes', 'entries', 'preferences', 'queue']) {
         if (db.objectStoreNames.contains(oldName as never)) db.deleteObjectStore(oldName as never)
@@ -42,7 +43,7 @@ function pending(entity: SyncEntity, recordId: string): PendingOperation {
   return { id: `${entity}:${recordId}`, entity, recordId, queuedAt: new Date().toISOString() }
 }
 
-async function seedIfNeeded(db: IDBPDatabase<RitmoDatabase>): Promise<void> {
+async function seedIfNeeded(db: IDBPDatabase<AgatsuDatabase>): Promise<void> {
   const stored = await db.get('preferences', 'current')
   const preferences = stored ?? DEFAULT_PREFERENCES
   if (preferences.hasSeededDefaults) return

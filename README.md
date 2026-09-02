@@ -1,4 +1,4 @@
-# Ritmo — Habit tracker
+# Agatsu — Habit tracker
 
 PWA móvil para registrar tiempo dedicado a hábitos sin una pantalla de acceso. Guarda primero en IndexedDB, funciona sin conexión y sincroniza en segundo plano con una identidad anónima de Firebase.
 
@@ -84,4 +84,4 @@ Conviene conservar periódicamente el JSON fuera del navegador.
 
 ## Especificación
 
-El cambio completo está documentado en [`openspec/changes/build-habit-tracker-pwa`](./openspec/changes/build-habit-tracker-pwa) con propuesta, diseño, requisitos verificables y tareas.
+La construcción inicial está documentada en [`openspec/changes/build-habit-tracker-pwa`](./openspec/changes/build-habit-tracker-pwa) y el cambio de identidad en [`openspec/changes/rename-app-agatsu`](./openspec/changes/rename-app-agatsu), ambos con propuesta, diseño, requisitos verificables y tareas.

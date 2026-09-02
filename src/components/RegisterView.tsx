@@ -75,7 +75,7 @@ export function RegisterView({ onOpen, onCreate }: {
   return (
     <section className="view-stack view-enter">
       <header className="view-title-row">
-        <div><span className="eyebrow">{formatDate(today)}</span><h1>Registra tu ritmo</h1></div>
+        <div><span className="eyebrow">{formatDate(today)}</span><h1>Registra tu día</h1></div>
         {habits.length > 1 && (
           <button className={`soft-button compact ${ordering ? 'selected' : ''}`} type="button" onClick={() => setOrdering(!ordering)}>
             <Pencil size={15} /> {ordering ? 'Listo' : 'Ordenar'}

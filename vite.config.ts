@@ -14,8 +14,8 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: ['icon.svg'],
       manifest: {
-        name: 'Ritmo — Mis hábitos',
-        short_name: 'Ritmo',
+        name: 'Agatsu — Mis hábitos',
+        short_name: 'Agatsu',
         description: 'Un espacio sencillo para cuidar tus hábitos cada día.',
         theme_color: '#173b2c',
         background_color: '#f5f1e8',

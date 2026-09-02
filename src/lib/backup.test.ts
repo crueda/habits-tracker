@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { createBackup, parseBackup } from './backup'
 import type { AppSnapshot } from '../types'
+import { LEGACY_BACKUP_FORMAT, LEGACY_DATABASE_NAME, LEGACY_THEME_STORAGE_KEY } from './compatibility'
 
 const snapshot: AppSnapshot = {
   habitTypes: [{
@@ -16,7 +17,15 @@ const snapshot: AppSnapshot = {
 
 describe('backup validation', () => {
   it('round-trips a valid version 2 backup', () => {
-    expect(parseBackup(createBackup(snapshot)).habitTypes[0]?.name).toBe('Pasear')
+    const backup = createBackup(snapshot)
+    expect(backup.format).toBe('ritmo-habits-backup')
+    expect(parseBackup(backup).habitTypes[0]?.name).toBe('Pasear')
+  })
+
+  it('retains the pre-rebrand storage compatibility identifiers', () => {
+    expect(LEGACY_DATABASE_NAME).toBe('ritmo-habits')
+    expect(LEGACY_THEME_STORAGE_KEY).toBe('ritmo-theme')
+    expect(LEGACY_BACKUP_FORMAT).toBe('ritmo-habits-backup')
   })
 
   it('rejects unknown formats', () => {

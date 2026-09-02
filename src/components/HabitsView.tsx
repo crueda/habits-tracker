@@ -18,11 +18,11 @@ export function HabitsView({ onCreate, onEdit }: { onCreate: () => void; onEdit:
   const archived = store.habitTypes.filter((habit) => !habit.deletedAt && habit.archivedAt)
 
   const exportJson = () => {
-    downloadText(JSON.stringify(createBackup(store), null, 2), `ritmo-copia-${toLocalDate()}.json`, 'application/json;charset=utf-8')
+    downloadText(JSON.stringify(createBackup(store), null, 2), `agatsu-copia-${toLocalDate()}.json`, 'application/json;charset=utf-8')
     setMessage('Copia JSON descargada.')
   }
   const exportMarkdown = () => {
-    downloadText(createMarkdownReport(store), `ritmo-resumen-${toLocalDate()}.md`, 'text/markdown;charset=utf-8')
+    downloadText(createMarkdownReport(store), `agatsu-resumen-${toLocalDate()}.md`, 'text/markdown;charset=utf-8')
     setMessage('Resumen Markdown descargado.')
   }
   const importJson = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +103,7 @@ export function HabitsView({ onCreate, onEdit }: { onCreate: () => void; onEdit:
         <input ref={importRef} className="visually-hidden" type="file" accept="application/json,.json" onChange={(event) => void importJson(event)} />
         {message && <p className="settings-message" role="status">{message}</p>}
       </section>
-      <p className="app-version">Ritmo 0.2 · Tus hábitos, a tu manera</p>
+      <p className="app-version">Agatsu 0.2 · Tu progreso, cada día</p>
     </section>
   )
 }

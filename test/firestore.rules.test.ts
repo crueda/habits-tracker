@@ -12,7 +12,7 @@ let environment: RulesTestEnvironment
 
 beforeAll(async () => {
   environment = await initializeTestEnvironment({
-    projectId: 'demo-ritmo',
+    projectId: 'demo-agatsu',
     firestore: {
       host: '127.0.0.1',
       port: 8080,
