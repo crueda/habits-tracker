@@ -11,4 +11,4 @@
 ## 3. Verify and deliver
 
 - [x] 3.1 Validate OpenSpec, lint, tests, and the production build
-- [ ] 3.2 Commit, push, and verify the expanded icon catalog on GitHub Pages
+- [x] 3.2 Commit, push, and verify the expanded icon catalog on GitHub Pages
