@@ -9,15 +9,23 @@ const DIARY_SEED: HabitSeed = {
   color: '#b85c70',
 }
 
+const OFURO_SEED: HabitSeed = {
+  id: 'default-ofuro',
+  name: 'Ofuro',
+  icon: 'bath',
+  color: '#4d738b',
+}
+
 export const INITIAL_HABIT_SEEDS: ReadonlyArray<HabitSeed> = [
   { id: 'default-piano', name: 'Piano', icon: 'piano', color: '#e57542' },
   { id: 'default-fuerza', name: 'Fuerza', icon: 'dumbbell', color: '#4d8b63' },
   { id: 'default-japones', name: 'Japonés', icon: 'languages', color: '#6672a5' },
   { id: 'default-piscina', name: 'Piscina', icon: 'waves', color: '#3f7c85' },
   DIARY_SEED,
+  OFURO_SEED,
 ]
 
-const UPGRADE_HABIT_SEEDS: ReadonlyArray<HabitSeed> = [DIARY_SEED]
+const UPGRADE_HABIT_SEEDS: ReadonlyArray<HabitSeed> = [DIARY_SEED, OFURO_SEED]
 
 export function missingDefaultHabits(existing: HabitType[], hasSeededDefaults: boolean, now: string): HabitType[] {
   const existingIds = new Set(existing.map((habit) => habit.id))

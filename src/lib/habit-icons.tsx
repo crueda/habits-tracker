@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import {
-  Activity, Apple, BedDouble, Bike, BookOpen, Brain, BriefcaseBusiness, Broom,
+  Activity, Apple, Bath, BedDouble, Bike, BookOpen, Brain, BriefcaseBusiness, Broom,
   Calculator, Camera, Code2, Coffee, Dog, Droplets, Drum, Dumbbell, Footprints,
   GraduationCap, Guitar, HeartPulse, House, Languages, Lightbulb, Moon, Mountain,
   Music, NotebookPen, Palette, PenLine, PersonStanding, Piano, Pill, SportShoe,
@@ -39,6 +39,7 @@ export const HABIT_ICON_GROUPS: ReadonlyArray<HabitIconGroup> = [
     { id: 'coffee', label: 'Pausa', icon: Coffee },
     { id: 'moon', label: 'Descanso', icon: Moon },
     { id: 'bed-double', label: 'Dormir', icon: BedDouble },
+    { id: 'bath', label: 'Baño', icon: Bath },
     { id: 'droplets', label: 'Hidratación', icon: Droplets },
     { id: 'apple', label: 'Alimentación', icon: Apple },
     { id: 'utensils', label: 'Comida', icon: Utensils },

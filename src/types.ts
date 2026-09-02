@@ -15,6 +15,7 @@ export type HabitIconName =
   | 'target'
   | 'activity'
   | 'apple'
+  | 'bath'
   | 'bed-double'
   | 'briefcase'
   | 'broom'

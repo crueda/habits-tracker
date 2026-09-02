@@ -9,7 +9,7 @@ const LEGACY_ICON_NAMES: HabitIconName[] = [
 ]
 
 describe('habit icon catalog', () => {
-  it('offers forty unique choices across useful categories', () => {
+  it('offers at least forty unique choices across useful categories', () => {
     const ids = HABIT_ICON_OPTIONS.map((option) => option.id)
     const labels = HABIT_ICON_OPTIONS.map((option) => option.label)
 
@@ -17,9 +17,10 @@ describe('habit icon catalog', () => {
       'Movimiento', 'Bienestar', 'Aprendizaje y trabajo', 'Creatividad', 'Vida diaria',
     ])
     expect(HABIT_ICON_GROUPS.every((group) => group.options.length > 0)).toBe(true)
-    expect(HABIT_ICON_OPTIONS).toHaveLength(40)
-    expect(new Set(ids)).toHaveProperty('size', 40)
-    expect(new Set(labels)).toHaveProperty('size', 40)
+    expect(HABIT_ICON_OPTIONS).toHaveLength(41)
+    expect(new Set(ids)).toHaveProperty('size', 41)
+    expect(new Set(labels)).toHaveProperty('size', 41)
+    expect(HABIT_ICON_OPTIONS).toContainEqual(expect.objectContaining({ id: 'bath', label: 'Baño' }))
   })
 
   it('retains every legacy identifier and validates every catalog choice', () => {
