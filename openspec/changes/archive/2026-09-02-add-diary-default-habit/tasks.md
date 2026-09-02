@@ -11,4 +11,4 @@
 ## 3. Verify and deliver
 
 - [x] 3.1 Validate OpenSpec, lint, tests, and production build
-- [ ] 3.2 Push and verify Diario on GitHub Pages, then consolidate the completed change
+- [x] 3.2 Push and verify Diario on GitHub Pages
