@@ -4,9 +4,9 @@ PWA móvil para registrar tiempo dedicado a hábitos sin una pantalla de acceso.
 
 La aplicación incluye tres destinos:
 
-- **Registro**: tarjetas rápidas para Piano, Fuerza, Japonés y Piscina, reordenables con el modo «Ordenar».
-- **Progreso**: mapa de 16 semanas al estilo de las contribuciones de GitHub, con intensidad según objetivos logrados.
-- **Hábitos**: nombre, icono Lucide, color, duración del slot y slots necesarios para alcanzar el objetivo.
+- **Registro**: tarjetas rápidas para Piano, Fuerza, Japonés y Piscina, centradas en registrar sin controles secundarios.
+- **Progreso**: mapa de 52 semanas al estilo de las contribuciones de GitHub, con intensidad y filtro por hábito.
+- **Hábitos**: nombre, 40 iconos Lucide categorizados, color, duración del slot, objetivo y orden de las tarjetas.
 
 En el primer uso se crean esos cuatro hábitos con slots de 15 minutos y un objetivo inicial de un slot. Después se pueden editar, archivar o eliminar.
 
@@ -33,7 +33,8 @@ La compilación usa `/habits-tracker/` como ruta base para GitHub Pages. La conf
 
 Proyecto configurado: `habits-tracker-78d9b`.
 
-- Authentication: proveedor **Anónimo** habilitado.
+- Authentication → Configuración → Acciones de usuario: **Creación de cuentas** habilitada.
+- Authentication → Método de acceso: proveedor **Anónimo** habilitado.
 - Authentication → Configuración → Dominios autorizados: `crueda.github.io`.
 - Firestore: base `(default)`, edición Standard, región `eur3` y plan Spark.
 - Reglas: [firestore.rules](./firestore.rules).
@@ -49,6 +50,8 @@ npx firebase deploy --only firestore:rules
 ```
 
 Las reglas únicamente permiten a una identidad autenticada leer y escribir dentro de `users/{su-uid}`. El sitio público no permite acceder a los datos de otra persona.
+
+Si aparece `auth/admin-restricted-operation`, Firebase está bloqueando la creación de la identidad anónima: hay que habilitar **Creación de cuentas** en Acciones de usuario. Si aparece `auth/operation-not-allowed`, falta habilitar el proveedor **Anónimo**. Después se puede pulsar **Reintentar** en Agatsu; los cambios realizados mientras tanto permanecen guardados localmente.
 
 ### Pruebas de reglas
 
@@ -84,4 +87,4 @@ Conviene conservar periódicamente el JSON fuera del navegador.
 
 ## Especificación
 
-La construcción inicial está documentada en [`openspec/changes/build-habit-tracker-pwa`](./openspec/changes/build-habit-tracker-pwa) y el cambio de identidad en [`openspec/changes/rename-app-agatsu`](./openspec/changes/rename-app-agatsu), ambos con propuesta, diseño, requisitos verificables y tareas.
+Los requisitos vigentes están consolidados en [`openspec/specs`](./openspec/specs). Las propuestas, decisiones y tareas completadas se conservan con trazabilidad en [`openspec/changes/archive`](./openspec/changes/archive).

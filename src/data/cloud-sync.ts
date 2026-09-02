@@ -1,5 +1,6 @@
 import { collection, doc, getDocs, onSnapshot, setDoc, type Unsubscribe } from 'firebase/firestore'
 import type { HabitType, SyncEntity, SyncStatus, TimeEntry } from '../types'
+import { cloudErrorDetail } from '../lib/cloud-errors'
 import { getPendingOperations, getRecord, mergeRemoteRecords, removePendingOperation } from './local-db'
 import { ensureAnonymousUser, firestore } from './firebase'
 
@@ -64,7 +65,7 @@ export class CloudSync {
         await this.flush()
         if (!this.listeners.length) this.subscribe()
       } catch (error) {
-        this.callbacks.onStatus(navigator.onLine ? 'error' : 'offline', error instanceof Error ? error.message : 'No se pudo conectar.')
+        this.callbacks.onStatus(navigator.onLine ? 'error' : 'offline', cloudErrorDetail(error))
         this.scheduleRetry()
       } finally {
         this.connecting = undefined
@@ -95,7 +96,7 @@ export class CloudSync {
       }
       this.callbacks.onStatus('synced')
     } catch (error) {
-      this.callbacks.onStatus(navigator.onLine ? 'error' : 'offline', error instanceof Error ? error.message : 'Hay cambios pendientes.')
+      this.callbacks.onStatus(navigator.onLine ? 'error' : 'offline', cloudErrorDetail(error))
       this.scheduleRetry()
     }
   }
@@ -110,7 +111,7 @@ export class CloudSync {
           if (await mergeRemoteRecords(entity, records)) await this.callbacks.onRecords()
         },
         (error) => {
-          this.callbacks.onStatus('error', error.message)
+          this.callbacks.onStatus('error', cloudErrorDetail(error))
           this.scheduleRetry()
         },
       ))
