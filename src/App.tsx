@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BarChart3, ListChecks, Settings2 } from 'lucide-react'
 import type { HabitType } from './types'
-import { getGreeting } from './lib/dates'
 import { LEGACY_THEME_STORAGE_KEY } from './lib/compatibility'
 import { useHabits } from './state/HabitsContext'
 import { RegisterView } from './components/RegisterView'
@@ -41,9 +40,6 @@ export default function App() {
 
   return (
     <div className={`app-shell ${view !== 'habits' ? 'focus-shell' : ''}`}>
-      <header className={`app-header ${view !== 'habits' ? 'focus-header' : 'settings-header'}`}>
-        <a className="brand" href={import.meta.env.BASE_URL} aria-label="Agatsu, inicio"><span className="brand-symbol">A</span><span><strong>Agatsu</strong>{view === 'habits' && <small>{getGreeting()}</small>}</span></a>
-      </header>
       <main className={`main-content ${view === 'register' ? 'register-content' : view === 'progress' ? 'progress-content' : ''}`}>
         {view === 'register' && <RegisterView onOpen={setEntryHabit} onCreate={() => setEditor({ open: true })} />}
         {view === 'progress' && <ProgressView />}
